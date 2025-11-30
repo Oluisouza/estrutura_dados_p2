@@ -36,6 +36,7 @@ class ArvoreBinaria:
         """
         return self._buscar_recursivo(self.raiz, valor)
     
+
     def _buscar_recursivo(self, no_atual: No, valor: int) -> bool:
         if no_atual is None:
             return False
@@ -46,7 +47,26 @@ class ArvoreBinaria:
             return self._buscar_recursivo(no_atual.esquerda, valor)
         else:
             return self._buscar_recursivo(no_atual.direita, valor)
+
+    def buscar_posicao(self, valor: int) -> int:
+        """
+        Retorna o Nível do nó (Profundidade).
+        Raiz = 0, Filhos da Raiz = 1, etc.
+        Retorna -1 se não encontrar.
+        """
+        return self._buscar_posicao_rec(self.raiz, valor, nivel=0)
     
+    def _buscar_posicao_rec(self, no: No, valor: int, nivel: int) -> int:
+        if no is None:
+            return -1
+        
+        if valor == no.valor:
+            return nivel
+        elif valor < no.valor:
+            return self._buscar_posicao_rec(no.esquerda, valor, nivel + 1)
+        else:
+            return self._buscar_posicao_rec(no.direita, valor, nivel + 1)
+
     def em_ordem(self) -> list:
         """
         Retorna uma lista com os valores da árvore em ordem 

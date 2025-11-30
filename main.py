@@ -10,7 +10,7 @@ def exibir_menu():
     print("\n=== STOCKINARVORE: SISTEMA DE LOGÌSTICA ===")
     print("1. Inserir novo elemento")
     print("2. Remover elemento")
-    print("3. Buscar elemento")
+    print("3. Buscar elemento e Remover")
     print("4. Mostrar Visualização Gráfica")
     print("5. Imprimir lista ordenada (Terminal)")
     print("0. Sair")
@@ -59,12 +59,21 @@ def main():
                 print("Valor inválido. Por favor, insira um número inteiro.")
         elif opcao == "3":
             try:
-                val = int(input("Digite o valor a ser buscado: "))
-                encontrado = arvore.buscar(val)
-                if encontrado:
-                    print(f"✅ O elemento {val} ESTÁ na árvore.")
+                val = int(input("Digite o valor a ser buscado e removido: "))
+                
+                nivel = arvore.buscar_posicao(val)
+                if nivel != -1:
+                    print(f"\n[ENCONTRADO] O elemento {val} está no nível {nivel} da árvore.)")
+
+                    confirmar = input(f"Deseja remover o {val} agora? (S/N): ").lower()
+
+                    if confirmar == 's':
+                        arvore.remover_e_rebalancear(val)
+                        print(f"Valor {val} removido com sucesso e árvore rebalanceada.")
+                    else:
+                        print("Remoção cancelada pelo usuário.")
                 else:
-                    print(f"❌ O elemento {val} NÃO ESTÁ na árvore.")
+                    print(f"\n[NAO ENCONTRADO] O elemento {val} NÃO está na árvore.")
             except ValueError:
                 print("Valor inválido. Por favor, insira um número inteiro.")
         elif opcao == "4":
@@ -75,7 +84,6 @@ def main():
         elif opcao == "0":
             print("Saindo do sistema. Até mais!")
             break
-
         else:
             print("Opção inválida. Tente novamente.")
 
