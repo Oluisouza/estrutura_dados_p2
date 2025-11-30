@@ -1,22 +1,24 @@
+import random
 from src.arvore import ArvoreBinaria
+from src.visualizadorGrafo import VisualizadorArvore
 
-def teste_arvore():
-    print("--- Iniciando Sistema ---")
+def teste_com_grafo():
+    print("--- Teste com Visualização de Grafo ---")
 
     arvore = ArvoreBinaria()
 
-    ids_produtos = [45, 10, 7, 90, 12, 50, 13, 39, 57]
+    lista_numeros = random.sample(range(1, 100), 25)
 
-    print(f" Inserindo: {ids_produtos}")
-    for id_prod in ids_produtos:
-        arvore.inserir(id_prod)
+    print(f"Inserindo lista: {lista_numeros}")
 
-    estoque_ordenado = arvore.em_ordem()
-    print(f"Estoque organizado (Em Ordem): {estoque_ordenado}")
+    for val in lista_numeros:
+        arvore.inserir(val)
 
-    busca = 14
-    encontrou = arvore.buscar(busca)
-    print(f"O produto {busca} esta no estoque? {'Sim' if encontrou else 'Não'}")
+    print("\n[INFO] Árvore montada na memória.")
+    print("Abrindo janela de visualização...")
+
+    viz = VisualizadorArvore(arvore)
+    viz.plotar()
 
 if __name__ == "__main__":
-    teste_arvore()
+    teste_com_grafo()
