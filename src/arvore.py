@@ -60,3 +60,55 @@ class ArvoreBinaria:
             self._em_ordem_recursivo(no.esquerda, lista)
             lista.append(no.valor)
             self._em_ordem_recursivo(no.direita, lista)
+
+
+
+    def carregar_lote_balanceado(self, lista_numeros: list[int]):
+        """
+        recebe a lista, ordena e constroi a árvore de forma balanceada.
+        """
+
+        lista_ordenada = sorted(list(set(lista_numeros)))
+
+        self.raiz = None
+
+        self.construir_balanceada(lista_ordenada)
+
+
+    def remover_e_rebalancear(self, valor: int) -> bool:
+        """
+        Remove um valor da árvore e rebalanceia a árvore
+        Retorna True se o valor foi removido, False caso contrário
+        """
+        if not self.buscar(valor):
+            return False
+        
+        lista_atual = self.em_ordem()
+        lista_atual.remove(valor)
+
+        self.carregar_lote_balanceado(lista_atual)
+        return True
+    
+    def inserir_e_rebalancear(self, valor: int):
+        """
+        Insere um valor na árvore e rebalanceia a árvore
+        """
+        lista_atual = self.em_ordem()
+        lista_atual.append(valor)
+
+        self.carregar_lote_balanceado(lista_atual)
+
+    def construir_balanceada(self, lista_ordenada: list[int]):
+        """
+        Constrói uma árvore balanceada a partir de uma lista ordenada
+        """
+        if not lista_ordenada:
+            return 
+        
+        meio = len(lista_ordenada) // 2
+        valor_meio = lista_ordenada[meio]
+
+        self.inserir(valor_meio)
+
+        self.construir_balanceada(lista_ordenada[:meio])
+        self.construir_balanceada(lista_ordenada[meio + 1:])
