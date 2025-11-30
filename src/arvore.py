@@ -16,19 +16,19 @@ class ArvoreBinaria:
         else:
             self._inserir_recursivo(self.raiz, valor)
 
-        def _inserir_recursivo(self, no_atual: No, valor: int) -> None:
-            if valor < no_atual.valor:
-                if no_atual.esquerda is None:
-                    no_atual.esquerda = No(valor)
-                else:
-                    self._inserir_recursivo(no_atual.esquerda, valor)
-            elif valor > no_atual.valor:
-                if no_atual.direita is None:
-                    no_atual.direita = No(valor)
-                else:
-                    self._inserir_recursivo(no_atual.direita, valor)
+    def _inserir_recursivo(self, no_atual: No, valor: int) -> None:
+        if valor < no_atual.valor:
+            if no_atual.esquerda is None:
+                no_atual.esquerda = No(valor)
             else:
-                print(f"Produto {valor} já cadastrado no estoque.")
+                self._inserir_recursivo(no_atual.esquerda, valor)
+        elif valor > no_atual.valor:
+            if no_atual.direita is None:
+                no_atual.direita = No(valor)
+            else:
+                self._inserir_recursivo(no_atual.direita, valor)
+        else:
+            print(f"Produto {valor} já cadastrado no estoque.")
 
     def buscar(self, valor: int) -> bool:
         """
@@ -46,7 +46,15 @@ class ArvoreBinaria:
             return self._buscar_recursivo(no_atual.esquerda, valor)
         else:
             return self._buscar_recursivo(no_atual.direita, valor)
-        
+    
+    def em_ordem(self) -> list:
+        """
+        Retorna uma lista com os valores da árvore em ordem 
+        """
+        elementos = []
+        self._em_ordem_recursivo(self.raiz, elementos)
+        return elementos
+
     def _em_ordem_recursivo(self, no: No, lista: list):
         if no:
             self._em_ordem_recursivo(no.esquerda, lista)

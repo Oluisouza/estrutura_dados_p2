@@ -14,7 +14,7 @@ def teste_arvore():
     estoque_ordenado = arvore.em_ordem()
     print(f"Estoque organizado (Em Ordem): {estoque_ordenado}")
 
-    busca = 50
+    busca = 14
     encontrou = arvore.buscar(busca)
     print(f"O produto {busca} esta no estoque? {'Sim' if encontrou else 'Não'}")
 
