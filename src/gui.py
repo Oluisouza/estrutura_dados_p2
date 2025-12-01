@@ -7,12 +7,29 @@ import random
 from src.arvore import ArvoreBinaria
 from src.visualizadorGrafo import VisualizadorArvore
 
+CORES = {
+    "bg_sidebar": "#2C3E50",     
+    "fg_sidebar": "#ECF0F1",     
+    "bg_main":    "#FFFFFF",     
+    "btn_add":    "#27AE60",     
+    "btn_del":    "#C0392B",     
+    "btn_find":   "#2980B9",     
+    "btn_new":    "#F39C12",     
+    "log_bg":     "#34495E",     
+    "log_fg":     "#BDC3C7"      
+}
+
+FONTE_TITULO = ("Segoe UI", 16, "bold")
+FONTE_TEXTO = ("Segoe UI", 11)
+FONTE_BTN = ("Segoe UI", 10, "bold")
 
 class StockInArvoreGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("StockInArvore - Sistema de Logística com Árvore Binária de Busca")
         self.root.geometry("1000x600")
+
+        self.root.configure(bg=CORES["bg_main"])
 
         self.arvore = ArvoreBinaria()
 
@@ -37,7 +54,10 @@ class StockInArvoreGUI:
         """
         Abre caixas de diálogo para o usuário escolher entra inserir os dados ou criar aleatórios.
         """
-        resposta_aleatoria = messagebox.askyesno("Configuração Inicial", "Deseja gerar uma árvore com números ALEATÒRIOS?\n\n(Clique em 'Não' para digitar sua própria lista)")
+        resposta_aleatoria = messagebox.askyesno(
+            "Boas Vindas", 
+            "Deseja gerar uma árvore com números ALEATÒRIOS?\n\n(Clique em 'Não' para digitar sua própria lista)"
+            )
 
         if resposta_aleatoria:
             return random.sample(range(1, 100), 25)
@@ -57,39 +77,96 @@ class StockInArvoreGUI:
             return random.sample(range(1, 100), 25)
 
     def _configurar_layout(self):
-        painel_esquerdo = tk.Frame(self.root, bg="#f0f0f0", width=250)
+        painel_esquerdo = tk.Frame(self.root, bg=CORES["bg_sidebar"], width=300)
         painel_esquerdo.pack(side=tk.LEFT, fill=tk.Y)
 
-        tk.Label(painel_esquerdo, text="Painel de Controle", font=("Arial", 14, "bold"), bg="#f0f0f0").pack(pady=20)
+        painel_esquerdo.pack_propagate(False)
 
-        tk.Label(painel_esquerdo, text="Valor (ID Produto):", bg="#f0f0f0").pack(pady=5)
-        self.entrada_valor = tk.Entry(painel_esquerdo, font=("Arial", 12))
-        self.entrada_valor.pack(pady=5, padx=10)
+        lbl_titulo = tk.Label(
+            painel_esquerdo,
+            text="Painel de Controle",
+            font=FONTE_TITULO,
+            bg=CORES["bg_sidebar"],
+            fg=CORES["fg_sidebar"]
+        )
+        lbl_titulo.pack(pady=(30, 20))
 
-        self._criar_botao(painel_esquerdo, "Inserir (+)", self.acao_inserir, "#4CAF50")
-        self._criar_botao(painel_esquerdo, "Remover (-)", self.acao_remover, "#F44336")
-        self._criar_botao(painel_esquerdo, "Buscar e Deletar (?)", self.acao_buscar_e_deletar, "#2196F3")
+        frame_input = tk.Frame(painel_esquerdo, bg=CORES["bg_sidebar"])
+        frame_input.pack(fill=tk.X, padx=20)
 
-        tk.Frame(painel_esquerdo, height=2, bg="#ccc").pack(fill=tk.X, pady=15, padx=10)
+        tk.Label(frame_input, text="Valor (ID Produto):",font=FONTE_TEXTO, bg=CORES["bg_sidebar"], fg=CORES["fg_sidebar"]).pack(anchor="w")
+        
+        self.entrada_valor = tk.Entry(
+            frame_input,
+            font=("Segoe UI", 14),
+            bd=0,
+            highlightthickness=2,
+            highlightbackground="#95a5a6",
+            highlightcolor=CORES["btn_find"],
+            justify="center")
+        self.entrada_valor.pack(fill=tk.X, pady=5, ipady=5)
 
-        self._criar_botao(painel_esquerdo, "Criar Nova Árvore", self.iniciar_arvore, "#FF9800")
+        tk.Frame(painel_esquerdo, height=1, bg="#7f8c8d").pack(fill=tk.X, padx=20, pady=20)
 
-        tk.Label(painel_esquerdo, text="Log do Sistema:", bg="#f0f0f0", font=("Arial", 10, "bold")).pack(pady=(20, 5))
-        self.log_text = tk.Text(painel_esquerdo, height=15, width=35, font=("Consolas", 9))
-        self.log_text.pack(padx=10, pady=5)
+        self._criar_botao(painel_esquerdo, "✚ Inserir", self.acao_inserir, CORES["btn_add"])
+        self._criar_botao(painel_esquerdo, "✖ Remover", self.acao_remover, CORES["btn_del"])
+        self._criar_botao(painel_esquerdo, "🔍 Buscar e Deletar", self.acao_buscar_e_deletar, CORES["btn_find"])
 
-        painel_direito = tk.Frame(self.root, bg="white")
+        tk.Frame(painel_esquerdo, height=1, bg="#7f8c8d").pack(fill=tk.X, pady=20, padx=20)
+
+        self._criar_botao(painel_esquerdo, "↻ Criar Nova Árvore", self.iniciar_arvore, CORES["btn_new"])
+
+        tk.Label(
+            painel_esquerdo,
+            text="Log do Sistema:",
+            font=("Segoe UI", 9, "bold"),
+            bg=CORES["bg_sidebar"],
+            fg="#95a5a6").pack(anchor="w", padx=20, pady=(30, 5))
+        
+        self.log_text = tk.Text(
+            painel_esquerdo,
+            height=10,
+            bg=CORES["log_bg"], 
+            fg=CORES["log_fg"],
+            font=("Consolas", 9),
+            bd=0,
+            padx=10, pady=10)
+        self.log_text.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+
+        painel_direito = tk.Frame(self.root, bg=CORES["bg_main"])
         painel_direito.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         self.figura = Figure(figsize=(5, 4), dpi=100)
+        self.figura.patch.set_facecolor(CORES["bg_main"])
         self.ax = self.figura.add_subplot(111)
 
         self.canvas = FigureCanvasTkAgg(self.figura, master=painel_direito)
-        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+        self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=20, pady=20)
+
+        tk.Label(
+            painel_direito,
+            text="Desenvolvido para o curso de Engenharia de Software - Estrutura de Dados",
+            bg=CORES["bg_main"],
+            fg="#7f8c8d",
+            font=("Segoe UI", 8)
+        ).pack(side=tk.BOTTOM, pady=10)
 
     def _criar_botao(self, pai, texto, comando, cor):
-        btn = tk.Button(pai, text=texto, command=comando, bg=cor, fg="white", font=("Arial", 10, "bold"))
-        btn.pack(fill=tk.X, padx=20, pady=5)
+        container = tk.Frame(pai, bg=CORES["bg_sidebar"])
+        container.pack(fill=tk.X, padx=20, pady=6)
+        
+        btn = tk.Button(
+            container,
+            text=texto,
+            command=comando, bg=cor,
+            fg="white", 
+            font=FONTE_BTN,
+            relief="flat",
+            cursor="hand2",
+            activebackground="white",
+            activeforeground=cor,
+            bd=0)
+        btn.pack(fill=tk.X, ipady=5)
 
     def acao_inserir(self):
         try:
