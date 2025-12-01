@@ -6,9 +6,25 @@ class VisualizadorArvore:
     def __init__(self, arvore: ArvoreBinaria):
         self.arvore = arvore
 
-    def plotar(self):
+    def plotar(self, ax=None):
+        """
+        Plota a árvore.
+        Se 'ax' for fornecido, desenha o grafo dentro desse eixo.
+        Se 'ax' for None, cria uma nova janela.
+        """
+        if ax is None:
+            plt.figure(figsize=(10, 6))
+            ax = plt.gca()
+            mostrar_janela = True
+        else:
+            ax.clear()
+            mostrar_janela = False
+
         if not self.arvore.raiz:
             print("Árvore vazia, nada para plotar.")
+            ax.text(0.5, 0.5, 'Árvore Vazia', ha='center', va='center', fontsize=14)
+            if mostrar_janela:
+                plt.show()
             return
         
         G = nx.DiGraph()
@@ -17,17 +33,16 @@ class VisualizadorArvore:
 
         pos = self._posicao_hierarquica(self.arvore.raiz)
 
-        plt.figure(figsize=(10, 6))
-        plt.title("Visualização da Árvore Binária de Busca")
+        nx.draw_networkx_nodes(G, pos, node_size=600, node_color="#87CEEB", edgecolors="black", ax=ax)
 
-        nx.draw_networkx_nodes(G, pos, node_size=700, node_color="skyblue", edgecolors="black")
+        nx.draw_networkx_edges(G, pos, arrows=True, arrowstyle='-|>', arrowsize=15, ax=ax)
 
-        nx.draw_networkx_edges(G, pos, arrows=True, arrowstyle='-|>', arrowsize=20)
+        nx.draw_networkx_labels(G, pos, font_size=10, font_weight="bold", ax=ax)
 
-        nx.draw_networkx_labels(G, pos, font_size=12, font_weight="bold")
+        ax.axis('off')
 
-        plt.axis("off")
-        plt.show()
+        if mostrar_janela:
+            plt.show()
 
     def _adicionar_nos_arestas(self, no: No, G: nx.DiGraph):
         if no is None:

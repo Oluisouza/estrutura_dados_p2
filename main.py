@@ -1,8 +1,11 @@
 import sys
 import random
+import tkinter as tk
 from src.arvore import ArvoreBinaria
 from src.visualizadorGrafo import VisualizadorArvore
+from src.gui import StockInArvoreGUI
 
+"""
 def limpar_tela():
     print("\n" * 50)
 
@@ -89,3 +92,15 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
+
+if __name__ == "__main__":
+    try:
+        root = tk.Tk()
+        
+        app = StockInArvoreGUI(root)
+        
+        root.mainloop()
+    
+    except KeyboardInterrupt:
+        print("Aplicação encerrada.")
